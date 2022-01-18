@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameApi.Models;
+//Any error fixed with Linq
+using System.Linq;
 
 namespace GameApi.Controllers
 {
@@ -47,6 +49,7 @@ namespace GameApi.Controllers
     }
 
     // PUT: api/Cardigans/{id}
+    [HttpPut("{id}")]
 
     public async Task<IActionResult> Put(int id, Cardigan cardigan)
     {
@@ -79,6 +82,22 @@ namespace GameApi.Controllers
     private bool CardiganExists(int id)
     {
       return _db.Cardigans.Any(e => e.CardiganId == id);
+    }
+
+    // DELETE: api/Cardigans/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCardigan(int id)
+    {
+      var cardigan = await _db.Cardigans.FindAsync(id);
+      if (cardigan == null)
+      {
+        return NotFound();
+      }
+
+      _db.Cardigans.Remove(cardigan);
+      await _db.SaveChangesAsync();
+
+      return NoContent();
     }
   }
 }

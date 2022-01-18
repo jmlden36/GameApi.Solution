@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,5 +44,58 @@ namespace GameApi.Controllers
 
       return CreatedAtAction("Post", new {id=s});
     }
+
+    // PUT: api/Shoes/{id}
+    [HttpPut("{id}")]
+
+    public async Task<IActionResult> Put(int id, Shoe shoe)
+    {
+      if (id != shoe.ShoeId)
+      {
+        return BadRequest();
+      }
+
+      _db.Entry(shoe).State = EntityState.Modified;
+
+      try
+      {
+        await _db.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!ShoeExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
+    }
+
+    private bool ShoeExists(int id)
+    {
+      return _db.Shoes.Any(e => e.ShoeId == id);
+    }
+
+    // DELETE: api/Shoes/{id}
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteShoe(int id)
+    {
+      var shoe = await _db.Shoes.FindAsync(id);
+      if (shoe == null)
+      {
+        return NotFound();
+      }
+
+      _db.Shoes.Remove(shoe);
+      await _db.SaveChangesAsync();
+
+      return NoContent();
+    }
   }
 }
+  

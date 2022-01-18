@@ -11,6 +11,7 @@ namespace GameApi.Models
 
     public DbSet<Cardigan> Cardigans { get; set; }
     public DbSet<Shoe> Shoes { get; set; }
+    public DbSet<Item> Items { get; set; }
     
   }
 }
