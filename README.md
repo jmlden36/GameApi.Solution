@@ -10,10 +10,9 @@ GET items by different criteria
 GET items by random
 
 {
-  PlayerId: "PLACEHLOLDER";
-  Equipment:{
-    1:{CardiganId:"PLACEHOLDER", Name:"CARDIGAN_NAME_PLACEHOLDER", Description:"PLACEHOLDER"},
-    2:{ShoeId:"PLACEHOLDER", Name:"SHOES_NAME_PLACEHOLDER", Description:"PLACEHOLDER"},
-    3:{ItemId:"PLACEHOLDER", Name:"HAND_ITEM_NAME_PLACEHOLDER", Description:"PLACEHOLDER"};
-  };
+  PlayerId: "PLACEHLOLDER",
+  Name: "Placeholder",
+  EquippedCardigan:{CardiganId:"PLACEHOLDER", Name:"CARDIGAN_NAME_PLACEHOLDER", Description:"PLACEHOLDER"},
+  EquippedShoes:{ShoeId:"PLACEHOLDER", Name:"SHOES_NAME_PLACEHOLDER", Description:"PLACEHOLDER"},
+  HandItem: {ItemId:"PLACEHOLDER", Name:"HAND_ITEM_NAME_PLACEHOLDER", Description:"PLACEHOLDER"}
 }
