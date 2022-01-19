@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using GameApi.Models;
 using System.Text.Json;
 using Microsoft.AspNetCore.Cors;
+using System;
 
 namespace GameApi.Controllers
 {
@@ -65,10 +66,16 @@ namespace GameApi.Controllers
         .OrderBy(w=>w.TilePositionId)
         .ToListAsync();
     }
+    [EnableCors("outside")]
     [HttpGet("map/t")]
-    public bool getTransparency(int x, int y, int z)
+    public void getTransparency(int x, int y, int z)
     {
-      return CzechTransparancy(x,y,z);
+      if(CzechTransparancy(x,y,z))
+      {
+        Console.WriteLine("good to go");  
+      }else{
+        Console.WriteLine("Not good to go");
+      }
     }
     //POST api/players
     [EnableCors("outside")]
@@ -166,11 +173,13 @@ namespace GameApi.Controllers
 
 
     //Function Zone
+    [EnableCors("outside")]
     private bool PlayerExists(int id)
     {
       return _db.Players.Any(e => e.PlayerId == id);
     }
 
+    [EnableCors("outside")]
     public bool CzechTransparancy(int x, int y, int z)
     {
       return _db.World
