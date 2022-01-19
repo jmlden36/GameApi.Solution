@@ -21,6 +21,14 @@ namespace GameApi
         {
             services.AddDbContext<GameApiContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
+                //new
+                services.AddCors(options => 
+                {
+                    options.AddDefaultPolicy(builder=>builder.WithOrigins("Https://localhost:5000"));
+                    options.AddPolicy("outside", builder => builder.AllowAnyOrigin());
+                }
+                );
+                //end new
             services.AddControllers();
         }
 
@@ -32,9 +40,11 @@ namespace GameApi
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();            
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

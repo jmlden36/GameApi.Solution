@@ -16,3 +16,14 @@ GET items by random
   EquippedShoes:{ShoeId:"PLACEHOLDER", Name:"SHOES_NAME_PLACEHOLDER", Description:"PLACEHOLDER"},
   HandItem: {ItemId:"PLACEHOLDER", Name:"HAND_ITEM_NAME_PLACEHOLDER", Description:"PLACEHOLDER"}
 }
+
+-Multiple queries
+-Enable CORS
+  Allow all origins policy with attributes
+-Build player canvas
+-be able to play with 2 players
+
+
+
+
+-Possible Token Based Authentication

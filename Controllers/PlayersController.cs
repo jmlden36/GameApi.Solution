@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GameApi.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Cors;
 
 namespace GameApi.Controllers
 {
@@ -20,17 +21,12 @@ namespace GameApi.Controllers
 
     // GET api/players
     [HttpGet]
-    // public async string Get()
-    // {
-    //   var x = await _db.Players.ToListAsync();
-    //   string test = JsonSerializer.Serialize(x);
-    //   return test;
-    // }
     public async Task<ActionResult<IEnumerable<Player>>> Get()
     {
       return await _db.Players.ToListAsync();
     }
-    
+    [EnableCors("outside")]
+
     //GET api/players/1
     [HttpGet("{id}")]
     public async Task<ActionResult<Player>> GetPlayer(int id)
@@ -40,10 +36,23 @@ namespace GameApi.Controllers
       {
         return NotFound();
       }
+      
       return s;
+    }
+    
+    [EnableCors("outside")]
+    [HttpGet("prox")]
+    public async Task<ActionResult<IEnumerable<Player>>> GetProxPlayers(int x, int y, int z, int range)
+    {
+      var query = _db.Players.AsQueryable();
+      query =  query.Where(p=> p.z==z);
+      query = query.Where(p=>p.x >= x-range&&p.x<=x+range);
+      query = query.Where(p=>p.y >= y-range&&p.y<=y+range);
+      return await query.ToListAsync();
     }
 
     //POST api/players
+    [EnableCors("outside")]
     [HttpPost]
     public async Task<ActionResult<Player>> Post(string x)
     {
@@ -56,6 +65,7 @@ namespace GameApi.Controllers
     }
 
     // PUT: api/Players/{id}
+    [EnableCors("outside")]
     [HttpPut("{id}")]
 
     public async Task<IActionResult> Put(int id, Player player)
@@ -83,13 +93,9 @@ namespace GameApi.Controllers
         }
       }
 
-      return NoContent();
+      return RedirectToAction("GetPlayer", new {id = id});
     }
 
-    private bool PlayerExists(int id)
-    {
-      return _db.Players.Any(e => e.PlayerId == id);
-    }
 
     // DELETE: api/Players/{id}
     [HttpDelete("{id}")]
@@ -105,6 +111,45 @@ namespace GameApi.Controllers
       await _db.SaveChangesAsync();
 
       return NoContent();
+    }
+
+    //ROUTE GRAVEYARD
+
+    // [HttpPatch("{id}")]
+
+    // public async Task<IActionResult> Patch(int id, Player player)
+    // {
+    //   if (id != player.PlayerId)
+    //   {
+    //     return BadRequest();
+    //   }
+
+    //   _db.Entry(player).State = EntityState.Modified;
+
+    //   try
+    //   {
+    //     await _db.SaveChangesAsync();
+    //   }
+    //   catch (DbUpdateConcurrencyException)
+    //   {
+    //     if (!PlayerExists(id))
+    //     {
+    //       return NotFound();
+    //     }
+    //     else
+    //     {
+    //       throw;
+    //     }
+    //   }
+
+    //   return NoContent();
+    // }
+
+
+    //Function Zone
+    private bool PlayerExists(int id)
+    {
+      return _db.Players.Any(e => e.PlayerId == id);
     }
   }
 }
