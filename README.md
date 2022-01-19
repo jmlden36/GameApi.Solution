@@ -27,3 +27,15 @@ GET items by random
 
 
 -Possible Token Based Authentication
+
+
+server sends map and player to client
+
+client paints mapdata and player object
+client listens for key press
+client sends keypresses to server
+
+server takes keypresses and rund chekc/move commands on player
+server sends mapand player to client
+
+client paints madata and player object

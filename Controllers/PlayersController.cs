@@ -50,7 +50,26 @@ namespace GameApi.Controllers
       query = query.Where(p=>p.y >= y-range&&p.y<=y+range);
       return await query.ToListAsync();
     }
-
+    [EnableCors("outside")]
+    [HttpGet("con")]
+    public async Task<ActionResult<Player>> moveRequest(int pId, bool n, bool s, bool e, bool w)
+    {
+      
+      return NoContent();
+    }
+    [HttpGet("map")]
+    public async Task<ActionResult<IEnumerable<TilePosition>>> getMap()
+    {
+      return await _db.World
+        .Include(w=>w.Tile)
+        .OrderBy(w=>w.TilePositionId)
+        .ToListAsync();
+    }
+    [HttpGet("map/t")]
+    public bool getTransparency(int x, int y, int z)
+    {
+      return CzechTransparancy(x,y,z);
+    }
     //POST api/players
     [EnableCors("outside")]
     [HttpPost]
@@ -150,6 +169,13 @@ namespace GameApi.Controllers
     private bool PlayerExists(int id)
     {
       return _db.Players.Any(e => e.PlayerId == id);
+    }
+
+    public bool CzechTransparancy(int x, int y, int z)
+    {
+      return _db.World
+        .Include(w=>w.Tile)
+        .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent;
     }
   }
 }

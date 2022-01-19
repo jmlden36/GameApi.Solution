@@ -2,14 +2,16 @@
 using GameApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GameApi.Solution.Migrations
 {
     [DbContext(typeof(GameApiContext))]
-    partial class GameApiContextModelSnapshot : ModelSnapshot
+    [Migration("20220119234006_GETMAP")]
+    partial class GETMAP
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
