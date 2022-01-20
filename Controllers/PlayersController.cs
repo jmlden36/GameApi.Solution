@@ -56,9 +56,7 @@ namespace GameApi.Controllers
     public async Task<ActionResult<Player>> moveRequest(int pId, bool n, bool s, bool e, bool w)
     {
       int[] dest = getDestination(pId, n,s,e,w);
-      Console.WriteLine(dest[0]);
-      Console.WriteLine(dest[1]);
-      Console.WriteLine(dest[2]);
+      
       if(CzechTransparancy(dest[0],dest[1],dest[2]))
       {
         Player target = await _db.Players.FindAsync(pId);
@@ -79,17 +77,7 @@ namespace GameApi.Controllers
         .OrderBy(w=>w.TilePositionId)
         .ToListAsync();
     }
-    [EnableCors("outside")]
-    [HttpGet("map/t")]
-    public void getTransparency(int x, int y, int z)
-    {
-      if(CzechTransparancy(x,y,z))
-      {
-        Console.WriteLine("good to go");  
-      }else{
-        Console.WriteLine("Not good to go");
-      }
-    }
+    
     //POST api/players
     [EnableCors("outside")]
     [HttpPost]
@@ -152,39 +140,6 @@ namespace GameApi.Controllers
       return NoContent();
     }
 
-    //ROUTE GRAVEYARD
-
-    // [HttpPatch("{id}")]
-
-    // public async Task<IActionResult> Patch(int id, Player player)
-    // {
-    //   if (id != player.PlayerId)
-    //   {
-    //     return BadRequest();
-    //   }
-
-    //   _db.Entry(player).State = EntityState.Modified;
-
-    //   try
-    //   {
-    //     await _db.SaveChangesAsync();
-    //   }
-    //   catch (DbUpdateConcurrencyException)
-    //   {
-    //     if (!PlayerExists(id))
-    //     {
-    //       return NotFound();
-    //     }
-    //     else
-    //     {
-    //       throw;
-    //     }
-    //   }
-
-    //   return NoContent();
-    // }
-
-
     //Function Zone
     [EnableCors("outside")]
     private bool PlayerExists(int id)
@@ -195,9 +150,6 @@ namespace GameApi.Controllers
     [EnableCors("outside")]
     public bool CzechTransparancy(int x, int y, int z)
     {
-      Console.WriteLine(_db.World
-        .Include(w=>w.Tile)
-        .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent);
       return _db.World
         .Include(w=>w.Tile)
         .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent;
@@ -207,9 +159,6 @@ namespace GameApi.Controllers
     {
       Player target = _db.Players.FirstOrDefault(x=>x.PlayerId == PlayerId);
       int[] output = {target.x,target.y,target.z};
-      Console.WriteLine(output[0]);
-      Console.WriteLine(output[1]);
-      Console.WriteLine(output[2]);
 
       if(n)
       {
@@ -227,9 +176,6 @@ namespace GameApi.Controllers
       {
         output[1]-=1;
       }
-      Console.WriteLine(output[0]);
-      Console.WriteLine(output[1]);
-      Console.WriteLine(output[2]);
       return output;
     }
   }
