@@ -6,10 +6,10 @@
     <!-- Skylar Avatar/Logo -->
     <br>
     <a href="https://github.com/Skylar-Brockbank">
-        <img src="https://avatars.githubusercontent.com/u/91647723?v=4" alt= "skylar brockbank profile" width="100" height="100">
+        <img src="https://avatars.githubusercontent.com/u/91647723?v=4" alt= "skylar brockbank profile" width="100" height="100" style="border-radius:50%">
     </a>
     <a href="https://github.com/jmlden36">
-        <img src="https://avatars.githubusercontent.com/u/90112126?v=4" alt= "Matt Luker Profile" width="100" height="100">
+        <img src="https://avatars.githubusercontent.com/u/90112126?v=4" alt= "Matt Luker Profile" width="100" height="100" style="border-radius:50%">
     </a>
     <p align="center">
       ___________________________

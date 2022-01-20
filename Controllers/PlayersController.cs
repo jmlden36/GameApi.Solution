@@ -65,9 +65,9 @@ namespace GameApi.Controllers
         target.z = dest[2];
         _db.Entry(target).State = EntityState.Modified;
         _db.SaveChanges();
-        return RedirectToAction("GET", new{id=pId});
+        return RedirectToAction("GET");
       }
-      return RedirectToAction("GET", new{id=pId});
+      return RedirectToAction("GET");
     }
     [HttpGet("map")]
     public async Task<ActionResult<IEnumerable<TilePosition>>> getMap()
