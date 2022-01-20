@@ -52,11 +52,24 @@ namespace GameApi.Controllers
       return await query.ToListAsync();
     }
     [EnableCors("outside")]
-    [HttpGet("con")]
+    [HttpGet("con/{pId}")]
     public async Task<ActionResult<Player>> moveRequest(int pId, bool n, bool s, bool e, bool w)
     {
-      
-      return NoContent();
+      int[] dest = getDestination(pId, n,s,e,w);
+      Console.WriteLine(dest[0]);
+      Console.WriteLine(dest[1]);
+      Console.WriteLine(dest[2]);
+      if(CzechTransparancy(dest[0],dest[1],dest[2]))
+      {
+        Player target = await _db.Players.FindAsync(pId);
+        target.x = dest[0];
+        target.y = dest[1];
+        target.z = dest[2];
+        _db.Entry(target).State = EntityState.Modified;
+        _db.SaveChanges();
+        return RedirectToAction("GET", new{id=pId});
+      }
+      return RedirectToAction("GET", new{id=pId});
     }
     [HttpGet("map")]
     public async Task<ActionResult<IEnumerable<TilePosition>>> getMap()
@@ -80,14 +93,14 @@ namespace GameApi.Controllers
     //POST api/players
     [EnableCors("outside")]
     [HttpPost]
-    public async Task<ActionResult<Player>> Post(string x)
+    public async Task<ActionResult<Player>> Post(Player input)
     {
-      Player s = JsonSerializer.Deserialize<Player>(x);
-      // Player s = new Player() {Name=x.Name,EquippedCardigan=(Cardigan) x.EquippedCardigan, EquippedShoes=(Shoe) x.EquippedShoes, }
-      _db.Players.Add(s);
+      // Player objectInput = JsonSerializer.Deserialize<Player>(input);
+      
+      _db.Players.Add(input);
       await _db.SaveChangesAsync();
 
-      return CreatedAtAction("Post", new {id=s});
+      return CreatedAtAction("Post", new {id=input.PlayerId}, input);
     }
 
     // PUT: api/Players/{id}
@@ -182,9 +195,42 @@ namespace GameApi.Controllers
     [EnableCors("outside")]
     public bool CzechTransparancy(int x, int y, int z)
     {
+      Console.WriteLine(_db.World
+        .Include(w=>w.Tile)
+        .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent);
       return _db.World
         .Include(w=>w.Tile)
         .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent;
+    }
+    [EnableCors("outside")]
+    public int[] getDestination(int PlayerId, bool n, bool s,bool e,bool w)
+    {
+      Player target = _db.Players.FirstOrDefault(x=>x.PlayerId == PlayerId);
+      int[] output = {target.x,target.y,target.z};
+      Console.WriteLine(output[0]);
+      Console.WriteLine(output[1]);
+      Console.WriteLine(output[2]);
+
+      if(n)
+      {
+        output[0]+=1;
+      }
+      if(s)
+      {
+        output[0]-=1;
+      }
+      if(e)
+      {
+        output[1]+=1;
+      }
+      if(w)
+      {
+        output[1]-=1;
+      }
+      Console.WriteLine(output[0]);
+      Console.WriteLine(output[1]);
+      Console.WriteLine(output[2]);
+      return output;
     }
   }
 }
