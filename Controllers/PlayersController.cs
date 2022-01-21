@@ -10,6 +10,7 @@ using System;
 
 namespace GameApi.Controllers
 {
+  [EnableCors("outside")]
   [Route("api/[controller]")]
   [ApiController]
   public class PlayersController: ControllerBase
@@ -26,9 +27,8 @@ namespace GameApi.Controllers
     {
       return await _db.Players.ToListAsync();
     }
-    [EnableCors("outside")]
-
     //GET api/players/1
+    [EnableCors("outside")]
     [HttpGet("{id}")]
     public async Task<ActionResult<Player>> GetPlayer(int id)
     {
@@ -56,6 +56,7 @@ namespace GameApi.Controllers
     public async Task<ActionResult<Player>> moveRequest(int pId, bool n, bool s, bool e, bool w)
     {
       int[] dest = getDestination(pId, n,s,e,w);
+      
       
       if(CzechTransparancy(dest[0],dest[1],dest[2]))
       {
