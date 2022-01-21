@@ -24,8 +24,7 @@ namespace GameApi
                 //new
                 services.AddCors(options => 
                 {
-                    options.AddDefaultPolicy(builder=>builder.WithOrigins("Https://localhost:5000"));
-                    options.AddPolicy("outside", builder => builder.AllowAnyOrigin());
+                    options.AddDefaultPolicy(builder=>builder.AllowAnyOrigin());
                 }
                 );
                 //end new

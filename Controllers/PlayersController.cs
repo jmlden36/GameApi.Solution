@@ -10,7 +10,7 @@ using System;
 
 namespace GameApi.Controllers
 {
-  [EnableCors("outside")]
+  
   [Route("api/[controller]")]
   [ApiController]
   public class PlayersController: ControllerBase
@@ -28,7 +28,7 @@ namespace GameApi.Controllers
       return await _db.Players.ToListAsync();
     }
     //GET api/players/1
-    [EnableCors("outside")]
+    
     [HttpGet("{id}")]
     public async Task<ActionResult<Player>> GetPlayer(int id)
     {
@@ -41,7 +41,7 @@ namespace GameApi.Controllers
       return s;
     }
     
-    [EnableCors("outside")]
+    
     [HttpGet("prox")]
     public async Task<ActionResult<IEnumerable<Player>>> GetProxPlayers(int x, int y, int z, int range)
     {
@@ -51,7 +51,7 @@ namespace GameApi.Controllers
       query = query.Where(p=>p.y >= y-range&&p.y<=y+range);
       return await query.ToListAsync();
     }
-    [EnableCors("outside")]
+    
     [HttpGet("con/{pId}")]
     public async Task<ActionResult<Player>> moveRequest(int pId, bool n, bool s, bool e, bool w)
     {
@@ -61,8 +61,8 @@ namespace GameApi.Controllers
       if(CzechTransparancy(dest[0],dest[1],dest[2]))
       {
         Player target = await _db.Players.FindAsync(pId);
-        target.x = dest[0];
         target.y = dest[1];
+        target.x = dest[0];
         target.z = dest[2];
         _db.Entry(target).State = EntityState.Modified;
         _db.SaveChanges();
@@ -80,7 +80,7 @@ namespace GameApi.Controllers
     }
     
     //POST api/players
-    [EnableCors("outside")]
+    
     [HttpPost]
     public async Task<ActionResult<Player>> Post(Player input)
     {
@@ -93,7 +93,7 @@ namespace GameApi.Controllers
     }
 
     // PUT: api/Players/{id}
-    [EnableCors("outside")]
+    
     [HttpPut("{id}")]
 
     public async Task<IActionResult> Put(int id, Player player)
@@ -142,20 +142,20 @@ namespace GameApi.Controllers
     }
 
     //Function Zone
-    [EnableCors("outside")]
+    
     private bool PlayerExists(int id)
     {
       return _db.Players.Any(e => e.PlayerId == id);
     }
 
-    [EnableCors("outside")]
+    
     public bool CzechTransparancy(int x, int y, int z)
     {
       return _db.World
         .Include(w=>w.Tile)
         .FirstOrDefault(w=>w.x==x&&w.y==y&&w.z==z).Tile.Transparent;
     }
-    [EnableCors("outside")]
+    
     public int[] getDestination(int PlayerId, bool n, bool s,bool e,bool w)
     {
       Player target = _db.Players.FirstOrDefault(x=>x.PlayerId == PlayerId);
@@ -163,19 +163,19 @@ namespace GameApi.Controllers
 
       if(n)
       {
-        output[0]+=1;
+        output[1]-=1;
       }
       if(s)
       {
-        output[0]-=1;
+        output[1]+=1;
       }
       if(e)
       {
-        output[1]+=1;
+        output[0]+=1;
       }
       if(w)
       {
-        output[1]-=1;
+        output[0]-=1;
       }
       return output;
     }
